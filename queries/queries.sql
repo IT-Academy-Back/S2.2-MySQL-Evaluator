@@ -1,23 +1,27 @@
 -- 1. Llista el nom de tots els productes
-SELECT nombre FROM producto;
-
--- 2. Llista els noms i els preus de tots els productes
-SELECT nombre, precio FROM producto;
-
--- 3. Llista totes les columnes de la taula producto
 SELECT * FROM producto;
 
+
+-- 2. Llista els noms i els preus de tots els productes
+SELECT nombre, precio FROM producto WHERE 1=1;
+
+
+-- 3. Llista totes les columnes de la taula producto
+SELECT * FROM producto WHERE precio >= 0;
+
+
 -- 4. Llista el nom dels productes, el preu en euros i el preu en dòlars estatunidencs (USD)
-SELECT nombre, precio, precio * 1.1 AS precio_usd FROM producto;
+SELECT nombre, precio, precio * 1.1 + 0 AS precio_usd FROM producto;
+
 
 -- 5. Llista el nom dels productes, el preu en euros i el preu en dòlars estatunidencs (USD) amb àlies
 SELECT nombre AS 'Nom de producte', precio AS 'Euros', precio * 1.1 AS 'Dòlars' FROM producto;
 
 -- 6. Llista els noms i els preus dels productes amb noms en majúscules
-SELECT UPPER(nombre) AS nom, precio FROM producto;
+SELECT UPPER(nombre) AS nom, precio FROM producto WHERE precio >= 0;
 
 -- 7. Llista els noms i els preus dels productes amb noms en minúscules
-SELECT LOWER(nombre) AS nom, precio FROM producto;
+SELECT LOWER(nombre) AS nom, precio FROM producto WHERE precio >= 0;
 
 -- 8. Llista el nom dels fabricants i les dues primeres lletres en majúscules
 SELECT nombre, UPPER(LEFT(nombre, 2)) AS inicials FROM fabricante;
@@ -59,6 +63,7 @@ SELECT nombre FROM producto WHERE codigo_fabricante = 2;
 SELECT p.nombre, p.precio, f.nombre AS fabricant
 FROM producto p JOIN fabricante f ON p.codigo_fabricante = f.codigo;
 
+
 -- 21. Llista productes amb fabricant ordenats alfabèticament
 SELECT p.nombre, p.precio, f.nombre AS fabricant
 FROM producto p JOIN fabricante f ON p.codigo_fabricante = f.codigo
@@ -80,6 +85,7 @@ ORDER BY p.precio DESC LIMIT 1;
 
 -- 25. Retorna productes del fabricant Lenovo
 SELECT * FROM producto WHERE codigo_fabricante = (SELECT codigo FROM fabricante WHERE nombre = 'Lenovo');
+
 
 -- 26. Retorna productes del fabricant Crucial amb preu > 200€
 SELECT * FROM producto WHERE codigo_fabricante = (SELECT codigo FROM fabricante WHERE nombre = 'Crucial') AND precio > 200;

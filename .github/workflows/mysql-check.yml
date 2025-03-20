@@ -20,7 +20,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Levantar Base de Datos con Docker Compose
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: Esperar a que MySQL esté listo
         run: |
