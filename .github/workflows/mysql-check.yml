@@ -44,10 +44,16 @@ jobs:
           name: Reporte_SQL
           path: RESULTADOS.md
 
-      - name: Publicar Reporte como Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: reporte-sql
-          files: RESULTADOS.md
-          body: "Resultados del análisis de queries SQL"
+      - name: Configurar Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Commit y Push del Reporte SQL
+        run: |
+          git add RESULTADOS.md
+          git commit -m "Actualizar Reporte SQL [skip ci]" || echo "No hay cambios que hacer"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
