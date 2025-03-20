@@ -12,7 +12,7 @@ def connect_db():
         host="127.0.0.1",
         user="root",
         password="root",
-        database="test_db"
+        database="tienda"
     )
 
 
@@ -42,25 +42,20 @@ def execute_query(cursor, query):
     return columns, formatted_result
 
 
-
 def format_value(value):
     """
-    Formatea valores numéricos para evitar diferencias en la comparación.
-    - Si el valor es None, devuelve "NULL".
-    - Si es un número decimal con parte decimal 0, lo convierte a entero.
-    - Si tiene decimales, lo redondea a 2 decimales.
-    - En otro caso, lo convierte a string.
+    Formatea valores de la base de datos:
+    - `None` se convierte en "NULL"
+    - Enteros y floats se formatean siempre con 2 decimales.
+    - Cualquier otro valor se convierte a string.
     """
     if value is None:
         return "NULL"
-    if isinstance(value, Decimal):  # Si es un Decimal de MySQL, lo convertimos correctamente
-        value = float(value)  # Convertimos Decimal a float
-    if isinstance(value, float):
-        if value.is_integer():  # Si es un número entero (ej. 2900.0)
-            return str(int(value))  # Convertir a string sin decimales
-        else:
-            return f"{value:.2f}"  # Si tiene decimales, mantener 2 decimales
-    return str(value)
+    
+    if isinstance(value, (int, float, Decimal)):
+        return f"{Decimal(value):.2f}"  # 🔹 Asegura que siempre haya 2 decimales en cualquier número.
+
+    return str(value)  # Para valores no numéricos
 
 
 
@@ -113,7 +108,11 @@ def analyze_performance(cursor, query):
         # Extraer métricas de rendimiento
         rows_examined = row[8] if row[8] is not None else 0
         filtered = row[9] if row[9] is not None else 100  # Si NULL, asumimos 100%
-        rows_returned = 1  # Estimación, ajustar según el resultado real
+        rows_returned = 1  # Estimación inicial
+
+        # Convertir a enteros para evitar comparaciones entre str e int
+        rows_examined = int(rows_examined) if isinstance(rows_examined, (int, float, Decimal)) else 0
+        rows_returned = int(rows_returned) if isinstance(rows_returned, (int, float, Decimal)) else 0
 
         # Si la query realmente se ejecutó, medimos `rows_returned`
         try:
@@ -130,9 +129,9 @@ def analyze_performance(cursor, query):
                     table_name = match.group(1)
                     count_query = f"SELECT COUNT(*) FROM {table_name}"
                     cursor.execute(count_query)
-                    rows_examined = cursor.fetchone()[0]  # Reemplazamos `0` con el número de filas reales
+                    rows_examined = int(cursor.fetchone()[0])  # Convertir a entero
             except:
-                rows_examined = "Desconocido"
+                rows_examined = 0  # Evita que sea 'Desconocido' y cause problemas
 
         # Detectar consultas ineficientes
         inefficiency_flag = ""
