@@ -30,9 +30,6 @@ jobs:
           done
           echo "MySQL está listo."
 
-      - name: Configurar Base de Datos de Prueba
-        run: mysql -h 127.0.0.1 -u root -proot < init_db.sql
-
       - name: Ejecutar Evaluación de Queries
         run: |
           source venv/bin/activate
