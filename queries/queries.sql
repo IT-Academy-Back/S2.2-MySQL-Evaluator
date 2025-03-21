@@ -1,5 +1,5 @@
 -- 1. Llista el nom de tots els productes
-SELECT * FROM producto;
+SELECT nombre FROM producto;
 
 
 -- 2. Llista els noms i els preus de tots els productes
