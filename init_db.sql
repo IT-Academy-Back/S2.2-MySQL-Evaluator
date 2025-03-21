@@ -1,8 +1,14 @@
 
 
 DROP DATABASE IF EXISTS tienda;
-CREATE DATABASE tienda CHARACTER SET utf8mb4;
+CREATE DATABASE tienda CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
 USE tienda;
+
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci;
+SET character_set_client = utf8mb4;
+SET character_set_connection = utf8mb4;
+SET character_set_results = utf8mb4;
 
 CREATE TABLE fabricante (
   codigo INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

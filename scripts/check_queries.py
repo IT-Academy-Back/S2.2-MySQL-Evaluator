@@ -9,7 +9,10 @@ def connect_db():
         host="127.0.0.1",
         user="root",
         password="root",
-        database="tienda"
+        database="tienda",
+        charset="utf8mb4",
+        use_unicode=True,  
+        collation='utf8mb4_general_ci'
     )
 
 def read_queries(file_path="./queries/queries.sql"):
@@ -97,6 +100,8 @@ def analyze_performance(cursor, query):
 def main():
     db = connect_db()
     cursor = db.cursor()
+    cursor.execute("SET NAMES utf8mb4;")
+
     queries = read_queries()
     report = "# 📊 Análisis de Consultas SQL\n\n"
 

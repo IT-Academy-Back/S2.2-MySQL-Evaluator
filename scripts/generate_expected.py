@@ -1,16 +1,31 @@
 import os
-import mysql.connector
+import pymysql
 import re
 from decimal import Decimal
 
-# Conectar a MySQL
-db = mysql.connector.connect(
+# Conectar a MySQL usando PyMySQL y forzando utf8mb4
+db = pymysql.connect(
     host="127.0.0.1",
     user="root",
     password="root",
-    database="tienda"
+    database="tienda",
+    charset="utf8mb4",
+    use_unicode=True,
+    autocommit=True
 )
+
 cursor = db.cursor()
+
+# 🔹 Asegurar UTF-8 en la comunicación con MySQL
+cursor.execute("SET NAMES utf8mb4 COLLATE utf8mb4_general_ci;")
+cursor.execute("SET CHARACTER SET utf8mb4;")
+cursor.execute("SET character_set_connection=utf8mb4;")
+
+
+
+def decode_row(row):
+    return tuple(value.decode("utf-8") if isinstance(value, bytes) else value for value in row)
+
 
 # Leer queries desde queries.sql
 def read_queries(file_path="./queries/queries.sql"):
@@ -26,6 +41,8 @@ def format_value(value):
     
     if isinstance(value, (int, float, Decimal)):
         return f"{Decimal(value):.2f}"  # 🔹 Asegura siempre 2 decimales
+    if isinstance(value, bytes):
+        return value.decode('utf-8')  # <- 👈 prueba si vienen como bytes
 
     return str(value)  # Para cadenas y otros valores
 
@@ -42,6 +59,8 @@ for i, query in enumerate(queries, start=1):
         cursor.execute(query)
         columns = [desc[0] for desc in cursor.description]
         result = cursor.fetchall()
+        result = [decode_row(row) for row in result]
+
 
         # Formatear resultados
         result_formatted = [" | ".join(columns)]
@@ -49,9 +68,15 @@ for i, query in enumerate(queries, start=1):
             formatted_row = " | ".join(format_value(value) for value in row)
             result_formatted.append(formatted_row)
 
+          # 🔍 **Depuración: Mostrar en pantalla los primeros resultados antes de escribir**
+        print(f"🔹 Query {i} - Primeras 3 líneas de resultados:")
+        print("\n".join(result_formatted[:5]))  # Muestra las primeras 3 líneas del resultado
+
+
         # Guardar en un archivo .out
-        with open(f"expected_results/query_{i}.out", "w") as f:
+        with open(f"expected_results/query_{i}.out", "w", encoding="utf-8") as f:
             f.write("\n".join(result_formatted))
+
 
         print(f"✅ Resultados esperados guardados en: expected_results/query_{i}.out")
 
