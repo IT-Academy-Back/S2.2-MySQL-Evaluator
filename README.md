@@ -78,20 +78,14 @@ Puedes ejecutar las pruebas en tu máquina local con los siguientes pasos:
 docker compose up -d
 ```
 
-3. Espera unos segundos a que MySQL esté listo, luego ejecuta el script para crear la base de datos y poblarla con datos:
-
-```sh
-mysql -h 127.0.0.1 -u root -proot < init_db.sql
-```
-
-4. Activa tu entorno virtual de Python (si no lo tienes creado, haz primero `python3 -m venv venv`):
+3. Activa tu entorno virtual de Python (si no lo tienes creado, haz primero `python3 -m venv venv`):
 
 ```sh
 source venv/bin/activate
-pip install -r requirements.txt  # Solo si no tienes instaladas las dependencias
-```
+pip install -r requirements.txt
+````
 
-5. Ejecuta el script de evaluación:
+4. Ejecuta el script de evaluación:
 
 ```sh
 python3 scripts/check_queries.py
