@@ -2,6 +2,9 @@ name: Evaluación de Queries SQL
 
 on: [push, pull_request]
 
+permissions:
+  contents: write
+
 jobs:
   check_queries:
     runs-on: ubuntu-latest
