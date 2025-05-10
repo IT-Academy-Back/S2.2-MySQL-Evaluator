@@ -88,7 +88,7 @@ pip install -r requirements.txt
 4. Ejecuta el script de evaluación:
 
 ```sh
-python3 scripts/check_queries.py
+python3 src/scripts/check_queries.py
 ```
 
 Esto generará el archivo `RESULTADOS.md` con el análisis de tus consultas.

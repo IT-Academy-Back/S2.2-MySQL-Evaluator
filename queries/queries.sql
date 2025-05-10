@@ -1,5 +1,5 @@
 -- 1. Llista el nom de tots els productes
-SELECT * FROM producto;
+SELECT nombre FROM producto;
 
 
 -- 2. Llista els noms i els preus de tots els productes
@@ -7,7 +7,7 @@ SELECT nombre, precio FROM producto;
 
 
 -- 3. Llista totes les columnes de la taula producto
-SELECT * FROM producto WHERE precio >= 0;
+SELECT * FROM producto WHERE precio;
 
 
 -- 4. Llista el nom dels productes, el preu en euros i el preu en dòlars estatunidencs (USD)
