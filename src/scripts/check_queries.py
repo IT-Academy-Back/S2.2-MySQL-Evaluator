@@ -110,7 +110,7 @@ def main():
             columns, result = execute_query(cursor, query)
             result_formatted = [" | ".join(columns)] + [" | ".join(row) for row in result]
 
-            expected_file = f"expected_results/query_{i}.out"
+            expected_file = f"src/expected_results/query_{i}.out"
             expected = read_expected_result(expected_file)
 
             report += compare_results(i, result_formatted, expected)

@@ -48,7 +48,7 @@ def format_value(value):
 
 
 # Crear carpeta si no existe
-os.makedirs("expected_results", exist_ok=True)
+os.makedirs("src/expected_results", exist_ok=True)
 
 # Obtener las queries del archivo
 queries = read_queries()
@@ -74,7 +74,7 @@ for i, query in enumerate(queries, start=1):
 
 
         # Guardar en un archivo .out
-        with open(f"expected_results/query_{i}.out", "w", encoding="utf-8") as f:
+        with open(f"src/expected_results/query_{i}.out", "w", encoding="utf-8") as f:
             f.write("\n".join(result_formatted))
 
 
