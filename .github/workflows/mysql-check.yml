@@ -36,7 +36,7 @@ jobs:
       - name: Ejecutar Evaluación de Queries
         run: |
           source venv/bin/activate
-          python3 src/scripts/check_queries.py
+          python3 -m src.scripts.check_queries
 
       - name: Guardar Reporte como Artifact
         uses: actions/upload-artifact@v4
