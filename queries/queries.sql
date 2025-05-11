@@ -7,7 +7,7 @@ SELECT nombre, precio FROM producto;
 
 
 -- 3. Llista totes les columnes de la taula producto
-SELECT * FROM producto WHERE precio;
+SELECT nombre FROM producto WHERE precio;
 
 
 -- 4. Llista el nom dels productes, el preu en euros i el preu en dòlars estatunidencs (USD)
