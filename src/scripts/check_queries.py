@@ -6,7 +6,8 @@ from src.scripts.analyzer import QueryAnalyzer
 from src.scripts.validator import QueryValidator
 from src.scripts.constants import (
     DEFAULT_QUERIES_PATH, RESULTS_FILE,
-    EXPECTED_RESULTS_DIR, REPORT_HEADER, REPORT_SEPARATOR
+    EXPECTED_RESULTS_DIR, REPORT_HEADER, REPORT_SEPARATOR,
+    QUERIES_SUMMARY
 )
 
 
@@ -22,6 +23,7 @@ def main():
         
         queries = validator.read_queries(DEFAULT_QUERIES_PATH)
         report = [REPORT_HEADER]
+        correct_queries = 0
 
         for i, query in enumerate(queries, start=1):
             try:
@@ -31,12 +33,24 @@ def main():
                 expected_file = f"{EXPECTED_RESULTS_DIR}/query_{i}.out"
                 expected = validator.read_expected_result(expected_file)
 
-                report.append(validator.compare_results(i, result_formatted, expected))
+                result_text = validator.compare_results(i, result_formatted, expected)
+                report.append(result_text)
+                
+                # Si la query es correcta, incrementar el contador
+                if "✅" in result_text and "❌" not in result_text:
+                    correct_queries += 1
+                
                 report.append(analyzer.analyze(query))
                 report.append(REPORT_SEPARATOR)
 
             except Exception as e:
                 report.append(f"## ❌ Query {i}: Error\n- **Descripción**: {str(e)}\n\n")
+
+        # Añadir el resumen después del header
+        report.insert(1, QUERIES_SUMMARY.format(
+            correct=correct_queries,
+            total=len(queries)
+        ))
 
         Path(RESULTS_FILE).write_text("\n".join(report))
 
